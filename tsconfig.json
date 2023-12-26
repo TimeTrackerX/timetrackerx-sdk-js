@@ -2,7 +2,7 @@
     "include": ["src"],
     "exclude": ["node_modules", "tests", "dist"],
     "compilerOptions": {
-        "module": "esnext",
+        "module": "commonjs",
         "lib": ["dom", "ESNext"],
         "importHelpers": true,
         "declaration": true,
@@ -15,11 +15,10 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "moduleResolution": "node",
-        "jsx": "react-jsx",
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "types": ["bun-types"],
+        "types": ["bun-types", "mocha"],
         "noImplicitAny": true
     }
 }
