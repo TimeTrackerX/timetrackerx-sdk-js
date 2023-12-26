@@ -11,7 +11,7 @@ export interface AuthResponse {
     user: AuthUser;
 }
 
-interface AuthError {
+interface AuthError extends Error {
     name: string;
     message: string;
 }
