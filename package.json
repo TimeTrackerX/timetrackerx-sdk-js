@@ -151,9 +151,9 @@
         "report-dir": "coverage"
     },
     "release-it": {
-        "hooks": {},
         "git": {
             "commit": true,
+            "commitMessage": "chore: release v${version}",
             "tag": true,
             "push": true
         },
@@ -163,18 +163,6 @@
         "github": {
             "release": true,
             "autoGenerate": true
-        },
-        "gitlab": {
-            "release": false,
-            "releaseName": "Release ${version}",
-            "releaseNotes": null,
-            "milestones": [],
-            "tokenRef": "GITLAB_TOKEN",
-            "tokenHeader": "Private-Token",
-            "certificateAuthorityFile": null,
-            "assets": null,
-            "origin": null,
-            "skipChecks": false
         }
     }
 }
