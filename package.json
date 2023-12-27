@@ -20,6 +20,7 @@
         "release": "release-it",
         "build": "tsc",
         "prebuild": "rimraf dist",
+        "prepublish": "bun run build",
         "lint": "eslint . --ext ts,json,md --cache",
         "lint:fix": "bun lint --fix",
         "test": "ts-mocha -p tsconfig.json tests/**/*.spec.ts",
@@ -148,5 +149,32 @@
             "text-summary"
         ],
         "report-dir": "coverage"
+    },
+    "release-it": {
+        "hooks": {},
+        "git": {
+            "commit": true,
+            "tag": true,
+            "push": true
+        },
+        "npm": {
+            "publish": true
+        },
+        "github": {
+            "release": true,
+            "autoGenerate": true
+        },
+        "gitlab": {
+            "release": false,
+            "releaseName": "Release ${version}",
+            "releaseNotes": null,
+            "milestones": [],
+            "tokenRef": "GITLAB_TOKEN",
+            "tokenHeader": "Private-Token",
+            "certificateAuthorityFile": null,
+            "assets": null,
+            "origin": null,
+            "skipChecks": false
+        }
     }
 }
