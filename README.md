@@ -1,5 +1,7 @@
 # timetrackerx-sdk-js
 
+[![codecov](https://codecov.io/gh/TimeTrackerX/timetrackerx-sdk-js/graph/badge.svg?token=G45AZO0IW7)](https://codecov.io/gh/TimeTrackerX/timetrackerx-sdk-js)
+
 To install dependencies:
 
 ```bash
