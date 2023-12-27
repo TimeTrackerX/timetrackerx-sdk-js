@@ -4,23 +4,21 @@
 
 ### Auth Functionality
 
--   [ ] Authentication
+-   [x] Authentication
 
 ### Documentation
 
--   [ ] Comprehensive Documentation
-    -   [ ] Create detailed documentation for SDK usage
-    -   [ ] Include code examples for common use cases
-
-## Version 1.1.0
+-   [x] Comprehensive Documentation
+    -   [x] Create detailed documentation for SDK usage
+    -   [x] Include code examples for common use cases
 
 ### Testing
 
--   [ ] Unit Testing
-    -   [ ] Develop a suite of unit tests for SDK functionality
-    -   [ ] Ensure robust testing of error scenarios
+-   [x] Unit Testing
+    -   [x] Develop a suite of unit tests for SDK functionality
+    -   [x] Ensure robust testing of error scenarios
 
-## Version 1.2.0
+## Version 1.1.0
 
 ### Core Functionality
 
@@ -36,7 +34,7 @@
     -   [ ] Create detailed documentation for SDK usage
     -   [ ] Include code examples for common use cases
 
-## Version 1.3.0
+## Version 1.2.0
 
 ### Performance Optimization
 
