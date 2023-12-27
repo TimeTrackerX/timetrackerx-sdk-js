@@ -20,7 +20,6 @@
         "release": "release-it",
         "build": "tsc",
         "prebuild": "rimraf dist",
-        "prepublish": "bun run build",
         "lint": "eslint . --ext ts,json,md --cache",
         "lint:fix": "bun lint --fix",
         "test": "ts-mocha -p tsconfig.json tests/**/*.spec.ts",
@@ -151,6 +150,14 @@
         "report-dir": "coverage"
     },
     "release-it": {
+        "hooks": {
+            "before:init": [
+                "bun run lint",
+                "bun run test"
+            ],
+            "after:bump": "bun run build",
+            "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+        },
         "git": {
             "commit": true,
             "commitMessage": "chore: release v${version}",
