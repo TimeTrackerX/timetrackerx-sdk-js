@@ -22,5 +22,5 @@ jobs:
         bun-version: latest
     - run: bun install
     - run: bun lint
-    - run: bun build --if-present
-    - run: bun test
+    - run: bun run build
+    - run: bun run test
