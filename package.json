@@ -18,7 +18,7 @@
     ],
     "scripts": {
         "release": "release-it",
-        "build": "tsc",
+        "build": "tsc -p tsconfig.build.json",
         "prebuild": "rimraf dist",
         "lint": "eslint . --ext ts,json,md --cache",
         "lint:fix": "bun lint --fix",
