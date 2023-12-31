@@ -1,13 +1,13 @@
 {
-    "include": ["src"],
-    "exclude": ["node_modules", "tests", "dist"],
+    "include": ["src", "tests"],
+    "exclude": ["node_modules", "dist"],
     "compilerOptions": {
         "module": "commonjs",
         "lib": ["dom", "ESNext"],
         "importHelpers": true,
         "declaration": true,
         "sourceMap": true,
-        "rootDir": "./src/",
+        "rootDir": "./",
         "outDir": "./dist/",
         "strict": true,
         "noImplicitReturns": true,

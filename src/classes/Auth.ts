@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import { BaseClass, ClassParams } from '../shared/BaseClass';
 
 export interface AuthUser {
     id: number;
@@ -26,31 +26,10 @@ type AuthResult =
           error: AuthError;
       };
 
-interface BaseAuthParams {
-    baseUrl?: string;
-    http?: AxiosInstance;
-}
-
-interface AuthParamsWithBaseUrl extends BaseAuthParams {
-    baseUrl: string;
-}
-
-interface AuthParamsWithHttp extends BaseAuthParams {
-    http: AxiosInstance;
-}
-
-type AuthParams = AuthParamsWithHttp | AuthParamsWithBaseUrl;
-
-export class Auth {
-    defaultBaseUrl = 'http://localhost:4000';
-    http: AxiosInstance;
-
-    constructor({ baseUrl, http }: AuthParams) {
-        this.http =
-            http ||
-            axios.create({
-                baseURL: baseUrl,
-            });
+export class Auth extends BaseClass {
+    constructor(params: ClassParams) {
+        super(params);
+        // istanbul ignore next
         this.http.defaults.validateStatus = status => status > 199 && status < 600;
     }
 
