@@ -3,7 +3,7 @@ import { ClientEntity } from '../shared/entities';
 import { CreateClientPayload, PatchClientPayload } from '../shared/payloads';
 
 export class ClientApi extends RestFulApi<ClientEntity, CreateClientPayload, PatchClientPayload> {
-    uri = '/clients';
+    uri = '/api/clients';
 
     async clock({ jwt, id }: WithIdParams): Promise<EntityResponse<ClientEntity>> {
         try {
