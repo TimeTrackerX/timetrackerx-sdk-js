@@ -1,8 +1,6 @@
 import { BaseClass } from './BaseClass';
 
-interface BaseParams {
-    jwt: string;
-}
+interface BaseParams {}
 
 interface ListParams extends BaseParams {
     limit?: number;
@@ -58,12 +56,12 @@ export type EntityResponse<Entity> =
 export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> extends BaseClass {
     abstract uri: string;
 
-    async list({ jwt, ...params }: ListParams): Promise<ListResponse<Entity>> {
+    async list(params?: ListParams): Promise<ListResponse<Entity>> {
         try {
             const { data } = await this.http.get<PaginatedItems<Entity>>(this.uri, {
                 params,
                 headers: {
-                    Authorization: `Bearer ${jwt}`,
+                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
                 },
             });
 
@@ -73,11 +71,11 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
         }
     }
 
-    async create({ jwt, payload }: CreateParams<CreatePayload>): Promise<EntityResponse<Entity>> {
+    async create(payload: CreateParams<CreatePayload>): Promise<EntityResponse<Entity>> {
         try {
             const { data } = await this.http.post<Entity>(this.uri, payload, {
                 headers: {
-                    Authorization: `Bearer ${jwt}`,
+                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
                 },
             });
 
@@ -87,11 +85,11 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
         }
     }
 
-    async update({ jwt, id, payload }: UpdateParams<UpdatePayload>): Promise<EntityResponse<Entity>> {
+    async update({ id, payload }: UpdateParams<UpdatePayload>): Promise<EntityResponse<Entity>> {
         try {
             const { data } = await this.http.patch<Entity>(`${this.uri}/${id}`, payload, {
                 headers: {
-                    Authorization: `Bearer ${jwt}`,
+                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
                 },
             });
 
@@ -101,11 +99,11 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
         }
     }
 
-    async delete({ jwt, id }: WithIdParams): Promise<EntityResponse<Entity>> {
+    async delete(id: WithIdParams): Promise<EntityResponse<Entity>> {
         try {
             const { data } = await this.http.delete<Entity>(`${this.uri}/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${jwt}`,
+                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
                 },
             });
 

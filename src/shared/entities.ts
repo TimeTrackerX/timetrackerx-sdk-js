@@ -7,8 +7,12 @@ interface BaseEntity {
 
 export interface ClientEntity extends BaseEntity {
     user_id: number;
-    description: string;
     date_log_id: number;
+    name: string;
+    description?: string;
+    logo_url?: string;
+    hourly_rate?: number;
+    monthly_cap?: number;
 }
 
 export interface TimeLogEntity extends BaseEntity {

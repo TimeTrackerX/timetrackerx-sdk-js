@@ -5,11 +5,11 @@ import { CreateClientPayload, PatchClientPayload } from '../shared/payloads';
 export class ClientApi extends RestFulApi<ClientEntity, CreateClientPayload, PatchClientPayload> {
     uri = '/api/clients';
 
-    async clock({ jwt, id }: WithIdParams): Promise<EntityResponse<ClientEntity>> {
+    async clock(id: WithIdParams): Promise<EntityResponse<ClientEntity>> {
         try {
             const { data } = await this.http.post<ClientEntity>(`${this.uri}/${id}/clock`, {
                 headers: {
-                    Authorization: `Bearer ${jwt}`,
+                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
                 },
             });
 

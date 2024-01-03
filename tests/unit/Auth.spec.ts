@@ -3,7 +3,7 @@ import chai from 'chai';
 import dirtyChai from 'dirty-chai';
 import sinon from 'sinon';
 
-import { Auth } from '../src';
+import { Auth } from '../../src';
 
 const expect = chai.expect;
 

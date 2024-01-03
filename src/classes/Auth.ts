@@ -3,11 +3,12 @@ import { BaseClass, ClassParams } from '../shared/BaseClass';
 export interface AuthUser {
     id: number;
     name: string;
-    avatar?: string;
+    profile_img_url?: string;
 }
 
 export interface AuthResponse {
     token: string;
+    refreshToken: string;
     user: AuthUser;
 }
 
@@ -37,9 +38,13 @@ export class Auth extends BaseClass {
         const uri = '/auth/google/callback';
         const params = { code };
         const { data, status } = await this.http.get<AuthResponse>(uri, { params });
-
-        return status === 200
-            ? { auth: data as AuthResponse, error: undefined }
-            : { auth: undefined, error: data as unknown as AuthError };
+        if (status !== 200) {
+            return { auth: undefined, error: data as unknown as AuthError };
+        }
+        await this.tokenManager.setToken({
+            token: data.token,
+            refreshToken: data.refreshToken,
+        });
+        return { auth: data as AuthResponse, error: undefined };
     }
 }
