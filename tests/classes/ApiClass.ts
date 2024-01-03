@@ -1,4 +1,4 @@
-import RestFulApi from '../src/shared/RestFulApi';
+import RestFulApi from '../../src/shared/RestFulApi';
 
 export interface BaseApiItem {
     name: string;

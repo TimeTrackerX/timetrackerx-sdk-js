@@ -3,8 +3,8 @@ import chai from 'chai';
 import dirtyChai from 'dirty-chai';
 import sinon, { SinonStubbedInstance } from 'sinon';
 
-import { ClientApi } from '../src';
-import { TimeLogEntity } from '../src/shared/entities';
+import { ClientApi } from '../../src';
+import { TimeLogEntity } from '../../src/shared/entities';
 
 const expect = chai.expect;
 chai.use(dirtyChai);
@@ -14,7 +14,6 @@ type StubbedAxiosInstance = SinonStubbedInstance<AxiosInstance>;
 describe('ClientApi', () => {
     let apiClass: ClientApi;
     let httpStub: StubbedAxiosInstance;
-    const jwt = 'fake-jwt-token';
     beforeEach(() => {
         httpStub = sinon.stub<AxiosInstance>(axios.create());
         apiClass = new ClientApi({ http: httpStub });
@@ -38,7 +37,7 @@ describe('ClientApi', () => {
                 deleted: null,
             };
             httpStub.post.resolves({ data: expectedResponse });
-            const result = await apiClass.clock({ id: 1, jwt });
+            const result = await apiClass.clock({ id: 1 });
 
             expect(result.error).to.be.undefined();
             expect(result.data).to.deep.equal(expectedResponse);
@@ -47,7 +46,7 @@ describe('ClientApi', () => {
         it('should handle clock error', async () => {
             const expectedError = new Error('Clock error');
             httpStub.post.rejects(expectedError);
-            const result = await apiClass.clock({ id: 1, jwt });
+            const result = await apiClass.clock({ id: 1 });
 
             expect(result.data).to.be.undefined();
             expect(result.error).to.equal(expectedError);
