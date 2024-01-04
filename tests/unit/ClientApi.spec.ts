@@ -9,11 +9,9 @@ import { TimeLogEntity } from '../../src/shared/entities';
 const expect = chai.expect;
 chai.use(dirtyChai);
 
-type StubbedAxiosInstance = SinonStubbedInstance<AxiosInstance>;
-
 describe('ClientApi', () => {
     let apiClass: ClientApi;
-    let httpStub: StubbedAxiosInstance;
+    let httpStub: SinonStubbedInstance<AxiosInstance>;
     beforeEach(() => {
         httpStub = sinon.stub<AxiosInstance>(axios.create());
         apiClass = new ClientApi({ http: httpStub });
