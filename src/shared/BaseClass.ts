@@ -1,4 +1,4 @@
-import { AxiosInstance } from 'axios';
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { TokenStorageInterface } from './TokenStorageInterface';
 import { HttpBuilder } from '../classes/HttpBuilder';
@@ -24,5 +24,21 @@ export class BaseClass {
             : HttpBuilder.build({
                   baseURL: baseUrl || this.defaultBaseUrl,
               });
+    }
+
+    protected async sendAuthorizedRequest<Response>(config: AxiosRequestConfig): Promise<AxiosResponse<Response>> {
+        const token = await this.tokenManager.getToken();
+        const authorizedConfig: AxiosRequestConfig = {
+            ...config,
+            headers: {
+                ...config.headers,
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        return this.sendRequest<Response>(authorizedConfig);
+    }
+
+    protected async sendRequest<Response>(config: AxiosRequestConfig): Promise<AxiosResponse<Response>> {
+        return await this.http.request<Response>(config);
     }
 }

@@ -5,12 +5,11 @@ import { CreateClientPayload, PatchClientPayload } from '../shared/payloads';
 export class ClientApi extends RestFulApi<ClientEntity, CreateClientPayload, PatchClientPayload> {
     uri = '/api/clients';
 
-    async clock(id: WithIdParams): Promise<EntityResponse<ClientEntity>> {
+    async clock({ id }: WithIdParams): Promise<EntityResponse<ClientEntity>> {
         try {
-            const { data } = await this.http.post<ClientEntity>(`${this.uri}/${id}/clock`, {
-                headers: {
-                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
-                },
+            const { data } = await this.sendAuthorizedRequest<ClientEntity>({
+                method: 'get',
+                url: `${this.uri}/${id}/clock`,
             });
 
             return { data, error: undefined };

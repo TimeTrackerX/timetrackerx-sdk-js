@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import chai from 'chai';
 import dirtyChai from 'dirty-chai';
-import sinon from 'sinon';
+import sinon, { SinonStubbedInstance } from 'sinon';
 
 import { Auth } from '../../src';
 
@@ -9,13 +9,22 @@ const expect = chai.expect;
 
 chai.use(dirtyChai);
 describe('Auth', () => {
-    describe('authenticateWithGoogleCode', () => {
+    let apiClass: Auth;
+    let httpStub: SinonStubbedInstance<AxiosInstance>;
+    beforeEach(() => {
+        httpStub = sinon.stub<AxiosInstance>(axios.create());
+        apiClass = new Auth({ http: httpStub });
+    });
+
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    describe('->authenticateWithGoogleCode()', () => {
         it('should authenticate with Google Code successfully', async () => {
             const expectedAuthResult = { token: 'fake-auth-token', user: { id: 1, name: 'John Doe' } };
-            const http = axios.create();
-            sinon.stub(http, 'get').resolves({ data: expectedAuthResult, status: 200 });
-            const sdk = new Auth({ http });
-            const { auth: actualAuth, error } = await sdk.authenticateWithGoogleCode('fake-google-code');
+            httpStub.request.resolves({ data: expectedAuthResult, status: 200 });
+            const { auth: actualAuth, error } = await apiClass.authenticateWithGoogleCode('fake-google-code');
 
             expect(error).to.be.undefined();
             expect(actualAuth).to.deep.equal(expectedAuthResult);
@@ -23,11 +32,9 @@ describe('Auth', () => {
 
         it('should handle authentication failure', async () => {
             const expectedAuthResult = { name: 'AuthenticationError', message: 'Invalid Google Code' };
-            const http = axios.create();
-            sinon.stub(http, 'get').resolves({ data: expectedAuthResult, status: 400 });
-            const sdk = new Auth({ http });
+            httpStub.request.resolves({ data: expectedAuthResult, status: 400 });
 
-            const { auth, error } = await sdk.authenticateWithGoogleCode('invalid-google-code');
+            const { auth, error } = await apiClass.authenticateWithGoogleCode('invalid-google-code');
 
             expect(auth).to.be.undefined();
             expect(error).to.deep.equal(expectedAuthResult);
