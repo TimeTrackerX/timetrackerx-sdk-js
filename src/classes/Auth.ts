@@ -37,7 +37,11 @@ export class Auth extends BaseClass {
     async authenticateWithGoogleCode(code: string): Promise<AuthResult> {
         const uri = '/auth/google/callback';
         const params = { code };
-        const { data, status } = await this.http.get<AuthResponse>(uri, { params });
+        const { data, status } = await this.sendRequest<AuthResponse>({
+            method: 'get',
+            url: uri,
+            params,
+        });
         if (status !== 200) {
             return { auth: undefined, error: data as unknown as AuthError };
         }

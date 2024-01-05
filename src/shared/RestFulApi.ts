@@ -58,11 +58,10 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
 
     async list(params?: ListParams): Promise<ListResponse<Entity>> {
         try {
-            const { data } = await this.http.get<PaginatedItems<Entity>>(this.uri, {
+            const { data } = await this.sendAuthorizedRequest<PaginatedItems<Entity>>({
+                method: 'get',
+                url: this.uri,
                 params,
-                headers: {
-                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
-                },
             });
 
             return { data, error: undefined };
@@ -71,12 +70,12 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
         }
     }
 
-    async create(payload: CreateParams<CreatePayload>): Promise<EntityResponse<Entity>> {
+    async create({ payload }: CreateParams<CreatePayload>): Promise<EntityResponse<Entity>> {
         try {
-            const { data } = await this.http.post<Entity>(this.uri, payload, {
-                headers: {
-                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
-                },
+            const { data } = await this.sendAuthorizedRequest<Entity>({
+                method: 'post',
+                url: this.uri,
+                data: payload,
             });
 
             return { data, error: undefined };
@@ -87,10 +86,10 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
 
     async update({ id, payload }: UpdateParams<UpdatePayload>): Promise<EntityResponse<Entity>> {
         try {
-            const { data } = await this.http.patch<Entity>(`${this.uri}/${id}`, payload, {
-                headers: {
-                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
-                },
+            const { data } = await this.sendAuthorizedRequest<Entity>({
+                method: 'patch',
+                url: `${this.uri}/${id}`,
+                data: payload,
             });
 
             return { data, error: undefined };
@@ -99,12 +98,11 @@ export default abstract class RestFulApi<Entity, CreatePayload, UpdatePayload> e
         }
     }
 
-    async delete(id: WithIdParams): Promise<EntityResponse<Entity>> {
+    async delete({ id }: WithIdParams): Promise<EntityResponse<Entity>> {
         try {
-            const { data } = await this.http.delete<Entity>(`${this.uri}/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${await this.tokenManager.getToken()}`,
-                },
+            const { data } = await this.sendAuthorizedRequest<Entity>({
+                method: 'delete',
+                url: `${this.uri}/${id}`,
             });
 
             return { data, error: undefined };

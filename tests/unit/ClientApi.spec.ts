@@ -9,11 +9,9 @@ import { TimeLogEntity } from '../../src/shared/entities';
 const expect = chai.expect;
 chai.use(dirtyChai);
 
-type StubbedAxiosInstance = SinonStubbedInstance<AxiosInstance>;
-
 describe('ClientApi', () => {
     let apiClass: ClientApi;
-    let httpStub: StubbedAxiosInstance;
+    let httpStub: SinonStubbedInstance<AxiosInstance>;
     beforeEach(() => {
         httpStub = sinon.stub<AxiosInstance>(axios.create());
         apiClass = new ClientApi({ http: httpStub });
@@ -23,7 +21,7 @@ describe('ClientApi', () => {
         sinon.restore();
     });
 
-    describe('ClientApi:clock', () => {
+    describe('->clock()', () => {
         it('should return a timeLog successfully', async () => {
             const expectedResponse: TimeLogEntity = {
                 id: 1,
@@ -36,16 +34,15 @@ describe('ClientApi', () => {
                 timeDiffMinutes: 240,
                 deleted: null,
             };
-            httpStub.post.resolves({ data: expectedResponse });
+            httpStub.request.resolves({ data: expectedResponse });
             const result = await apiClass.clock({ id: 1 });
-
             expect(result.error).to.be.undefined();
             expect(result.data).to.deep.equal(expectedResponse);
         });
 
         it('should handle clock error', async () => {
             const expectedError = new Error('Clock error');
-            httpStub.post.rejects(expectedError);
+            httpStub.request.rejects(expectedError);
             const result = await apiClass.clock({ id: 1 });
 
             expect(result.data).to.be.undefined();
