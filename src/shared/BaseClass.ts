@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse, isAxiosError } from 'axios';
 
 import { TokenStorageInterface } from './TokenStorageInterface';
 import { HttpBuilder } from '../classes/HttpBuilder';
@@ -26,7 +26,10 @@ export class BaseClass {
               });
     }
 
-    protected async sendAuthorizedRequest<Response>(config: AxiosRequestConfig): Promise<AxiosResponse<Response>> {
+    protected async sendAuthorizedRequest<Response>(
+        config: AxiosRequestConfig,
+        iteration = 0,
+    ): Promise<AxiosResponse<Response>> {
         const token = await this.tokenManager.getToken();
         const authorizedConfig: AxiosRequestConfig = {
             ...config,
@@ -35,7 +38,20 @@ export class BaseClass {
                 Authorization: `Bearer ${token}`,
             },
         };
-        return this.sendRequest<Response>(authorizedConfig);
+        try {
+            return await this.sendRequest<Response>(authorizedConfig);
+        } catch (e) {
+            if (isAxiosError(e) && e.response?.data) {
+                const { error } = e.response.data as { error: string | undefined };
+
+                if (error === 'ExpiredTokenError' && iteration < 3) {
+                    await this.tokenManager.refreshTokens(this.http);
+                    return this.sendAuthorizedRequest<Response>(config, iteration + 1);
+                }
+            }
+
+            throw e;
+        }
     }
 
     protected async sendRequest<Response>(config: AxiosRequestConfig): Promise<AxiosResponse<Response>> {
