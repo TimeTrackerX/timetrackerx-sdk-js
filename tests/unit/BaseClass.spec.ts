@@ -23,7 +23,7 @@ describe('BaseClass', () => {
                 const scope = nock(baseUrl)
                     .get('/Items')
                     .reply(401, {
-                        error: 'ExpiredTokenError',
+                        name: 'ExpiredTokenError',
                     })
                     .post('/auth/refresh-token')
                     .reply(200, {

@@ -42,9 +42,9 @@ export class BaseClass {
             return await this.sendRequest<Response>(authorizedConfig);
         } catch (e) {
             if (isAxiosError(e) && e.response?.data) {
-                const { error } = e.response.data as { error: string | undefined };
+                const { name } = e.response.data as { name: string | undefined };
 
-                if (error === 'ExpiredTokenError' && iteration < 3) {
+                if (name === 'ExpiredTokenError' && iteration < 3) {
                     await this.tokenManager.refreshTokens(this.http);
                     return this.sendAuthorizedRequest<Response>(config, iteration + 1);
                 }
